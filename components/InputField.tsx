@@ -8,18 +8,26 @@ import {
 } from "@chakra-ui/form-control";
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
-  lable: string;
+  label: string;
   name: string;
-  placeholder?: string;
 };
 
-export const InputField: React.FC<InputFieldProps> = (props) => {
+export const InputField: React.FC<InputFieldProps> = ({
+  label,
+  size: _, // renaming this unused prop to underscore
+  ...props
+}) => {
   const [field, { error }] = useField(props);
 
   return (
     <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={field.name}>{props.lable}</FormLabel>
-      <Input {...field} id={field.name} placeholder={!!props.placeholder ? props.placeholder : ""} />
+      <FormLabel htmlFor={field.name}>{label}</FormLabel>
+      <Input
+        {...field}
+        {...props}
+        id={field.name}
+        placeholder={!!props.placeholder ? props.placeholder : ""}
+      />
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
     </FormControl>
   );
