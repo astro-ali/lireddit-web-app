@@ -5,11 +5,16 @@ import { InputField } from "../components/InputField";
 import { Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import { useRegisterMutation } from "../generated/graphql";
+import { toErrorMap } from "../util/toErrorMap";
+import { useRouter } from "next/router";
 
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
+
   const [, register] = useRegisterMutation();
+
+  const router = useRouter();
 
   return (
     <Wrapper variant="small">
@@ -22,9 +27,11 @@ const Register: React.FC<registerProps> = ({}) => {
             password: values.password,
           });
           if (res.data?.register.errors) {
-            setErrors({
-              username:"hey that is incorrect!"
-            })
+            setErrors(toErrorMap(res.data.register.errors));
+          } else if(res.data?.register.user){
+            // user logged in & redirect him to the home page
+            console.log(res.data.register.user);
+            router.push('/');
           }
         }}
       >

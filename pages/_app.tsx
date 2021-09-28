@@ -6,15 +6,21 @@ const client = createClient({
   url: "http://localhost:5000/graphql",
   fetchOptions: {
     credentials: "include",
-  },
+  }
 });
 
 function MyApp({ Component, pageProps }: any) {
   return (
     <Provider value={client}>
       <ThemeProvider theme={theme}>
-        <CSSReset />
-        <Component {...pageProps} />
+        <ColorModeProvider
+          options={{
+            useSystemColorMode: true,
+          }}
+        >
+          <CSSReset />
+          <Component {...pageProps} />
+        </ColorModeProvider>
       </ThemeProvider>
     </Provider>
   );
